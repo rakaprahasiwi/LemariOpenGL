@@ -1,0 +1,267 @@
+'POSISI MATA
+Dim pmatax# = 0
+Dim pmatay#= 0
+Dim pmataz# = 4
+
+'POSISI TITIK PANDANG
+Dim ppandangx# = 0 
+Dim ppandangy# = 0
+Dim ppandangz# = -4  
+
+'PINTU KANAN
+Dim zpintu# = -1   
+Dim xpintu# = 0.03  
+
+'PINTU KIRI
+Dim xpintuKR# = -0.03  
+Dim zpintuKR#= -1
+
+Dim pindah# = 0.01  'UNTUK PINDAH
+Dim lawang# = 0.001 'BUKA/TUTUP PINTU
+Dim tex_3                  
+Dim tex_4  
+Dim tex_5 
+Dim tex_6
+tex_3 = loadmipmaptexture("gbr/kanan.jpg") 
+tex_4 = loadmipmaptexture("gbr/kayu.jpg")
+tex_5 = loadmipmaptexture("gbr/rak.jpg") 
+tex_6 = loadmipmaptexture("gbr/alas.jpg")                                        
+
+'beritahu bahwa akan menggunakan tekstur
+glEnable(gl_texture_2d)  
+
+while true
+    glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+
+    gluLookAt(pmatax#, pmatay#, pmataz#, ppandangx#, ppandangy#, ppandangz#, 0,1,0) 'POSISI MATA, POSISI TITIK PANDANG, VEKTOR UP(0,1,0) 
+     
+    'PINTU DEPAN KANAN
+    glBindTexture(GL_TEXTURE_2D, tex_3)  
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1,0) 
+        glVertex3f(1,-2,-1) 'kanan bawah 
+        glTexCoord2f(1,1) 
+        glVertex3f(1,0,-1) 'kanan atas 
+        glTexCoord2f(0,1)            
+        glVertex3f(xpintu#,0,zpintu#) 'kiri atas
+        glTexCoord2f(0,0) 
+        glVertex3f(xpintu#,-2,zpintu#) 'kiri bawah       
+    glEnd() 
+
+    'PINTU DEPAN KIRI
+    glBindTexture(GL_TEXTURE_2D, tex_3) 
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1, 0) 
+        glVertex3f(-1,-2,-1)'kiri bawah 
+        glTexCoord2f(1,1) 
+        glVertex3f(-1,0,-1)'kiri atas
+        glTexCoord2f(0,1) 
+        glVertex3f(xpintuKR#,0,zpintuKR#) 'kanan atas 
+        glTexCoord2f(0,0) 
+        glVertex3f(xpintuKR#,-2,zpintuKR#) 'kanan bawah 
+    glEnd()  
+    
+    'DEPAN TENGAH
+    glBindTexture(GL_TEXTURE_2D, tex_4) 
+    glBegin(GL_QUADS)  
+        glTexCoord2f(1, 0) 
+        glVertex3f(-0.03,-2,-1) 'kiri bawah 
+        glTexCoord2f(1,1) 
+        glVertex3f(-0.03,0,-1) 'kiri atas 
+        glTexCoord2f(0,1) 
+        glVertex3f(0.03,0,-1) 'kanan atas 
+        glTexCoord2f(0,0) 
+        glVertex3f(0.03,-2,-1) 'kanan bawah 
+    glEnd() 
+    
+    'BELAKANG
+    glBindTexture(GL_TEXTURE_2D, tex_4)
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1,0) 
+        glVertex3f(1,-2,-2)'kanan bawah 
+        glTexCoord2f(1,1) 
+        glVertex3f(1,0,-2)'kanan atas
+        glTexCoord2f(0,1) 
+        glVertex3f(-1,0,-2)'kiri atas 
+        glTexCoord2f(0,0) 
+        glVertex3f(-1,-2,-2)'kiri bawah 
+    glEnd()  
+
+    'KANAN
+    glBindTexture(GL_TEXTURE_2D, tex_4) 
+    glBegin(GL_QUADS)  
+        glTexCoord2f(1,1) 
+        glVertex3f(1,-2,-2) 'belakang bawah 
+        glTexCoord2f(0,1)  
+        glVertex3f(1,0,-2) 'belakang atas 
+        glTexCoord2f(0,0) 
+        glVertex3f(1,0,-1) 'depan atas
+        glTexCoord2f(1,0) 
+        glVertex3f(1,-2,-1) 'depan bawah
+    glEnd()  
+    
+    'PEMBATAS TENGAH LEMARI sebelah kanan
+    glBindTexture(GL_TEXTURE_2D, tex_4) 
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1,1) 
+        glVertex3f(0.03,-2,-2) 'belakang bawah
+        glTexCoord2f(0,1) 
+        glVertex3f(0.03,0,-2) 'belakang atas
+        glTexCoord2f(0,0) 
+        glVertex3f(0.03,0,-1)  'depan atas
+        glTexCoord2f(1,0) 
+        glVertex3f(0.03,-2,-1)  'depan bawah
+    glEnd() 
+    
+    'PEMBATAS TENGAH LEMARI sebelah kiri
+    glBindTexture(GL_TEXTURE_2D, tex_6) 
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1,1) 
+        glVertex3f(-0.03,-2,-2) 'belakang bawah
+        glTexCoord2f(0,1) 
+        glVertex3f(-0.03,0,-2) 'belakang atas
+        glTexCoord2f(0,0) 
+        glVertex3f(-0.03,0,-1) 'depan atas
+        glTexCoord2f(1,0) 
+        glVertex3f(-0.03,-2,-1) 'depan bawah
+    glEnd()
+
+    'KIRI
+    glBindTexture(GL_TEXTURE_2D, tex_4) 
+    glBegin(GL_QUADS) 
+        glTexCoord2f(1,1) 
+        glVertex3f(-1,-2,-2) 'belakang bawah
+        glTexCoord2f(0,1) 
+        glVertex3f(-1,0,-2) 'belakang atas
+        glTexCoord2f(0,0) 
+        glVertex3f(-1,0,-1)  'depan atas
+        glTexCoord2f(1,0) 
+        glVertex3f(-1,-2,-1)  'depan bawah
+    glEnd()   
+
+    'ATAP LEMARI
+    glBindTexture(GL_TEXTURE_2D, tex_6)
+    glBegin(GL_QUADS )
+        glTexCoord2f(1,1)
+        glVertex3f(1,0,-1)  'kanan depan
+        glTexCoord2f(0,1)
+        glVertex3f(1,0,-2)  'kanan belakang
+        glTexCoord2f(0,0)
+        glVertex3f(-1,0,-2) 'kiri belakang
+        glTexCoord2f(1,0)
+        glVertex3f(-1,0,-1) 'kiri depan
+    glEnd()
+                   
+    'RAK ATAS 
+    glBindTexture(GL_TEXTURE_2D, tex_5)
+    glBegin(GL_QUADS )
+        glTexCoord2f(1,1)
+        glVertex3f(1,-0.6,-1) 'kanan depan
+        glTexCoord2f(0,1)
+        glVertex3f(1,-0.6,-2) 'kanan belakang
+        glTexCoord2f(0,0)
+        glVertex3f(0,-0.6,-2) 'kiri belakang
+        glTexCoord2f(1,0)
+        glVertex3f(0,-0.6,-1) 'kiri depan
+    glEnd() 
+    
+    'RAK BAWAH
+    glBindTexture(GL_TEXTURE_2D, tex_5)
+    glBegin(GL_QUADS )
+        glTexCoord2f(1,1)
+        glVertex3f(1,-1.2,-1) 'kanan depan
+        glTexCoord2f(0,1)
+        glVertex3f(1,-1.2,-2) 'kanan belakang
+        glTexCoord2f(0,0)
+        glVertex3f(0,-1.2,-2) 'kiri belakang
+        glTexCoord2f(1,0)
+        glVertex3f(0,-1.2,-1) 'kiri depan
+    glEnd()  
+                          
+    'ALAS LEMARI
+    glBindTexture(GL_TEXTURE_2D, tex_6)
+    glBegin(GL_QUADS )
+        glTexCoord2f(1,1)
+        glVertex3f(1,-2,-1)'kanan depan
+        glTexCoord2f(0,1)
+        glVertex3f(1,-2,-2) 'kanan belakang
+        glTexCoord2f(0,0)
+        glVertex3f(-1,-2,-2) 'kiri belakang
+        glTexCoord2f(1,0)
+        glVertex3f(-1,-2,-1) 'kiri depan
+    glEnd()       
+        
+    swapBuffers()
+
+    'PINDAH
+    if scankeydown(VK_RIGHT) then 
+        pmatax# = pmatax# + pindah# 
+        ppandangx# = ppandangx# - pindah# 
+        pmataz# = pmataz# - pindah#
+    elseif scankeydown(VK_LEFT) then 
+        pmatax# = pmatax# - pindah# 
+        ppandangx# = ppandangx# + pindah#
+        pmataz# = pmataz# + pindah#
+    elseif scankeydown(VK_UP) then
+        pmatay# = pmatay# + pindah#
+    elseif scankeydown(VK_DOWN) then
+        pmatay# = pmatay# - pindah#
+    elseif scankeydown(VK_ADD) then
+        pmataz# = pmataz# + pindah#
+    elseif scankeydown(VK_TAB) then
+        pmataz# = pmataz# - pindah#
+    endif
+
+    'PANDANGAN PINDAH
+    if scankeydown(87) then     'KEY W
+        ppandangy# = ppandangy# + pindah#
+    elseif scankeydown(83) then     'KEY S
+        ppandangy# = ppandangy# - pindah#   
+    elseif scankeydown(68) then     'KEY D
+        ppandangx# = ppandangx# + pindah#
+    elseif scankeydown(65) then     'KEY A
+        ppandangx# = ppandangx# - pindah#
+    endif
+
+    
+    'PINTU KANAN
+    if scankeydown(81) then  'KEY Q
+        if zpintu#>=0and xpintu#>=1then           
+            zpintu# = 0 
+            xpintu#=1 
+        else 
+            zpintu# = zpintu# + lawang# 
+            xpintu# = xpintu# + lawang# 
+        endif
+    endif     
+    if scankeydown(69) then 'KEY E
+         if zpintu#<=-1 and xpintu#<=0.03 then
+            zpintu#=-1  
+            xpintu#=0.03
+        else  
+            zpintu# = zpintu# - lawang# 
+            xpintu# = xpintu# -lawang#
+        endif
+    endif
+    
+    'PINTU KIRI
+    if scankeydown(90)then 'KEY Z
+        if zpintuKR#>=0and xpintuKR#<=-1 then
+            zpintuKR# = 0 
+            xpintuKR#=-1
+        else 
+            zpintuKR# = zpintuKR# + lawang# 
+            xpintuKR# = xpintuKR# - lawang#
+        endif
+    endif
+    if scankeydown(67)then 'KEY C
+         if zpintuKR#<=-1 and xpintuKR#>=-0.03 then
+            zpintuKR#=-1  
+            xpintuKR#=-0.03
+        else 
+            zpintuKR# = zpintuKR# - lawang# 
+            xpintuKR# = xpintuKR# +lawang#
+        endif
+    endif
+wend
